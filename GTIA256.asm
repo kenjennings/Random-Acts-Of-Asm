@@ -132,6 +132,10 @@ PRG_START
 	lda #[NMI_DLI|NMI_VBI] ; Set DLI and VBI Interrupt flags ON
 	sta NMIEN
 
+      lda  #GTIA_MODE_16_SHADE
+      sta GPRIOR
+      
+     
 Do_While_More_Electricity         ; Infinite loop, otherwise the
 	jmp Do_While_More_Electricity ; program returns to DOS immediately.
 
