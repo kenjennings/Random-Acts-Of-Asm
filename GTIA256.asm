@@ -42,10 +42,18 @@ DISPLAY_LIST
 
 	; 16 * 12 lines is 192 scan lines.
 	.rept 16
-		.rept 11
-			mDL_LMS DL_MAP_F, SCREEN_MEM
-		.endr
-		mDL_LMS DL_MAP_F|DL_DLI, SCREEN_MEM
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 1
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 2
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 3
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 4
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 5
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 6
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 7
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 8
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 9
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 10
+		mDL_LMS DL_MAP_F, SCREEN_MEM ; 11
+		mDL_LMS DL_MAP_F|DL_DLI, SCREEN_MEM ; 12th with DLI
 	.endr
 	
 ; Superfluous blank before JVB.
@@ -102,6 +110,7 @@ VBI
 	lda #$00
 	sta COLOR4
 	sta COLBK
+	lda #$10
 	sta BACK_COLOR
 	
 ; Finito.
