@@ -166,7 +166,7 @@ grab_next_char
 	lda #$00
 	sta Z_ROM_SOURCE+1
 	; multiply by 8 to get the character's bitmap start address
-    clc
+	clc
 	rol Z_ROM_SOURCE
 	rol Z_ROM_SOURCE+1 ; carry should be 0 from this
 	rol Z_ROM_SOURCE
