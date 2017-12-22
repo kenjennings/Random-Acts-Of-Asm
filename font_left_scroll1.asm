@@ -110,11 +110,14 @@ loop_populate_screen
 ; ***********************************************************************************
 ; Step 4 - MAIN PROGRAM LOOP - start the shifting 
 ; ***********************************************************************************
-	; framework should work identically on Atari
+	; framework  work similar on Atari
+	; However, blank space is 0 value on Atari, so a different end of string
+	; flag is needed.  Here, this is CHR$(155) which is the Atascii EOL.
 	
 	ldx #0                  
 keepgoing          
-	lda newmessage,X        
+	lda newmessage,X
+	cmp #155 ; ATASCII EOL
 	beq done               
 
 	jsr grab_next_char 
@@ -242,7 +245,6 @@ shiftchar
 ; Subroutine  Smooth_Scroll
 ; ***********************************************************************************
 
-
 Smooth_Scroll
 ;@w1                 bit $d011                       ; Wait for Raster to be off screen 
 ;                    bpl @w1 
@@ -255,8 +257,23 @@ Smooth_Scroll
                     bcc                 @loop
                     rts
 
-xsave               byte 00                   
-newmessage          null 'hello this is a message from gray defender this is my message will it repeat            it might!                           '                    
+
+; ***********************************************************************************
+; Other Variables and Data
+; ***********************************************************************************
+
+xsave	.byte $00      
+
+; Note Atari uses 0 for blank spaces in screen memory.  
+; Therefore a different value is needed for the end of the string.
+; (Or the code would just need to count characters.)
+
+newmessage 
+	.sbyte "Hello, this is a test scroll on the Atari version of gray defender's C64 "
+	.sbyte "horizontal scrolling by rolling the character set bitmap images. "
+	.sbyte "This is the message.  Will it repeat? "
+	.sbyte "             It might!                           "                    
+	.byte  155
 
 ; Here is one reason why atasm rocks
 ;
