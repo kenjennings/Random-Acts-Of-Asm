@@ -39,8 +39,13 @@ SOFT_CSET ; the scrolling character set
 
 	malign 1024 ; skip over the character set
 
+; When copying the character image to the scrolling line...
 Z_ROM_SOURCE = $FB
 SCROLL_DEST  = SOFT_CSET+$340 ; Or cset start of char 104 which is 64 + 40
+
+; When shifting bits...
+Z_CH_FIRST = $FB
+Z_CH_NEXT  = $FD
 
 CODE_START
 
@@ -205,7 +210,9 @@ copy_inverse_char
 ; ***********************************************************************************
 ; Subroutine  Shift char
 ; ***********************************************************************************
-                   
+Z_CH_FIRST = $FB
+Z_CH_NEXT  = $FD
+
 shiftchar     
                     jsr Smooth_Scroll      
                     ldx                 #00                
@@ -213,25 +220,25 @@ shiftchar
                     txa
                     tay                    
                     lda                 charhi,y
-                    sta                 $fc                 
+                    sta                 Z_CH_FIRST+1                 
                     lda                 charlow,y            
-                    sta                 $fb                 
+                    sta                 Z_CH_FIRST                 
                     iny
                     lda                 charhi,y
-                    sta                 $fe                 
+                    sta                 Z_CH_NEXT+1                 
                     lda                 charlow,y            
-                    sta                 $fd                 
+                    sta                 Z_CH_NEXT                 
                     ldy                 #7                                    
 @loopab                    
-                    lda                 ($fd),y             
+                    lda                 (Z_CH_NEXT),y             
                     and                 #%10000000          
                     bne                 @sec                    
 @clc                clc
                     jmp @cont              
 @sec                sec
-@cont               lda                 ($fb),y                  
+@cont               lda                 (Z_CH_FIRST),y                  
                     rol
-                    sta                 ($fb),y            
+                    sta                 (Z_CH_FIRST),y            
                     dey
                     cpy #$ff
                     bne                 @loopab             
