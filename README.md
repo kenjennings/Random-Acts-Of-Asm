@@ -11,5 +11,5 @@ Sets up a simple GTIA mode 9 display (16 grey scales) and uses a DLI to display 
 
 originally from:
 https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
-Atari port of horizontal text scrolling using ROL on the character bitmaps.
-This version uses shorter looping code, but takes longer to execute.
+This is an Atari port of a C64 example perfomring horizontal text scrolling using ROL on the character bitmaps.  Functionally, the shifting parts work identically on the Atari as the C64, since both use the same bitmap organization for the character set. This version uses shorter looping code, but takes longer to execute.
+
