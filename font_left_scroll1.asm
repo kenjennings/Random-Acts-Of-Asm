@@ -2,9 +2,9 @@
 ; 6502 assembly on Atari.
 ; Built with eclipse/wudsn/atasm.
 ;
-; port horizontal scrolling by ROL the character bitmap.
+; Atari port of C64 program to horizontally scrol text via character bitmap ROL.
 ;
-; originally from:
+; Originally from:
 ; https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
 ;
 ; 40 chars * 8 shifts == 320 shifts per frame.
@@ -41,7 +41,7 @@ SOFT_CSET ; the scrolling character set
 
 ; When copying the character image to the scrolling line...
 Z_ROM_SOURCE = $FB
-SCROLL_DEST  = SOFT_CSET+$340 ; Or cset start of char 104 which is 64 + 40
+SCROLL_DEST  = SOFT_CSET+$340 ; aka the cset start of char 104 which is 64 + 40
 
 ; When shifting bits...
 Z_CH_FIRST = $FB
@@ -111,16 +111,19 @@ loop_populate_screen
 	iny
 	cpy #40
 	bne loop_populate_screen
+	
+	lda #>SOFT_CSET ; Have to tell ANTIC to display the soft font or nothing moves.
+	sta CHBAS
 
 ; ***********************************************************************************
 ; Step 4 - MAIN PROGRAM LOOP - start the shifting 
 ; ***********************************************************************************
-	; framework  work similar on Atari
+	; framework  code will run the same on Atari
 	; However, blank space is 0 value on Atari, so a different end of string
 	; flag is needed.  Here, this is CHR$(155) which is the Atascii EOL.
 	
 	ldx #0                  
-keepgoing          
+keepgoing
 	lda newmessage,X
 	cmp #155 ; ATASCII EOL
 	beq done               
@@ -180,7 +183,7 @@ grab_next_char
 	rol Z_ROM_SOURCE+1 ; carry should be 0 from this
 	; Add to the ROM address
 	lda Z_ROM_SOURCE+1
-	adc #$E0
+	adc #$E0  ; Or this could be the chbas for a custom character.
 	sta Z_ROM_SOURCE+1
 	
 	pla ; restore original character
@@ -203,66 +206,104 @@ copy_inverse_char
 	rts
 
 
-
-
-
-
 ; ***********************************************************************************
 ; Subroutine  Shift char
 ; ***********************************************************************************
-Z_CH_FIRST = $FB
-Z_CH_NEXT  = $FD
 
 shiftchar     
-                    jsr Smooth_Scroll      
-                    ldx                 #00                
-@loop
-                    txa
-                    tay                    
-                    lda                 charhi,y
-                    sta                 Z_CH_FIRST+1                 
-                    lda                 charlow,y            
-                    sta                 Z_CH_FIRST                 
-                    iny
-                    lda                 charhi,y
-                    sta                 Z_CH_NEXT+1                 
-                    lda                 charlow,y            
-                    sta                 Z_CH_NEXT                 
-                    ldy                 #7                                    
-@loopab                    
-                    lda                 (Z_CH_NEXT),y             
-                    and                 #%10000000          
-                    bne                 @sec                    
-@clc                clc
-                    jmp @cont              
-@sec                sec
-@cont               lda                 (Z_CH_FIRST),y                  
-                    rol
-                    sta                 (Z_CH_FIRST),y            
-                    dey
-                    cpy #$ff
-                    bne                 @loopab             
-                    inx
-                    bne @keepgoing
-@keepgoing          cpx                 #41
-                    bne @loop
-                    rts
+	jsr Smooth_Scroll     ; Wait until scan line is after the text beine scrolled. 
+	
+	ldx #00           ; start at the first charater on the line
+	
+loop_shift_char
+	txa
+	tay                    
+	lda charhi,y      ; Z_CH_FIRST = charlookup[Y]
+	sta Z_CH_FIRST+1
+	lda charlow,y
+	sta Z_CH_FIRST
+	
+	iny              ; Y = Y + 1
+	
+	lda charhi,y     ; Z_CH_NEXT = charlookup[Y]
+	sta Z_CH_NEXT+1
+	lda charlow,y
+	sta Z_CH_NEXT
+	
+	ldy #7
+loop_a_to_b
+
+	lda (Z_CH_NEXT),y ; Get from the last/next/right-most char...
+	and	#~10000000    ; Check if it has high bit set
+	bne set_c         ; Yes.  
+
+clr_c                 ; No.  Clear Carry
+	clc
+	jmp continue_sc
+	
+set_c                 ; Yes. Set Carry
+	sec
+	
+continue_sc
+	lda (Z_CH_FIRST),y ; Get byte of the first/left-most character
+	rol A              ; Shift and roll in the carry from the next character     
+	sta (Z_CH_FIRST),y ; update it in the first character
+	
+	dey                ; go to next byte in bitmap
+	bpl loop_a_to_b    ; counting down 7...to...0.  $FF is negative
+	
+	; I'm kind wondering here about the 41-ness below.
+	; 40 displayed characters means the characters are numbered 0 to 39.
+	; Therefore the buffer character being rolled into the 39th is the 40th.
+	; Therefore the maximum values for FIRST is 39, and NEXT is 40.
+	; Then this loop appears to run up to FIRST = 40, and NEXT = 41 and 
+	; the 41st should not be visible, even partly on the screen. ?
+	inx                 ; next character position
+	cpx #41             ; have we reached the end?
+	bne loop_shift_char ; No.  do the next character.
+	
+	rts
 
 ; ***********************************************************************************
 ; Subroutine  Smooth_Scroll
 ; ***********************************************************************************
 
 Smooth_Scroll
-;@w1                 bit $d011                       ; Wait for Raster to be off screen 
-;                    bpl @w1 
-;@w2                 bit $d011 
-;                    bmi                 @w2                 
+;;@w1                 bit $d011                       ; Wait for Raster to be off screen 
+;;                    bpl @w1 
+;;@w2                 bit $d011 
+;;                    bmi                 @w2                 
 
-@loop
-                    lda                 $D012               
-                    cmp #100
-                    bcc                 @loop
-                    rts
+; for the Atari we're going to have an on screen visual indicator of where the 
+; processing stops and starts.  So on entry assume we're not in the correct position, 
+; and reassert the correct screen colors from the OS shadow registers.
+
+	lda COLOR2
+	sta COLPF2
+	lda COLOR4
+	sta COLBK
+	
+smooth_scroll_loop
+;                    lda                 $D012               
+;                    cmp #100
+;                    bcc                 @loop
+;                    rts
+
+	; I think the idea here is to wait for a scan line AFTER the scrolling line, so that
+	; the font bitmap ROL'ing is not applied while the text line is being displayed. 
+
+	lda VCOUNT
+	cmp #17 ; 24 blank lines, plus 8 for top text line, divided by 2 = 16. Start at +1
+	bne smooth_scroll_loop
+	
+	; We're at the correct position. Change border and playfield color to 
+	; identify when we're processing. 
+	
+	lda #$C6   ; It's not easy being green. 
+	sta COLPF2
+	sta COLBK
+	
+	rts
 
 
 ; ***********************************************************************************
@@ -279,10 +320,11 @@ newmessage
 	.sbyte "Hello, this is a test scroll on the Atari version of gray defender's C64 "
 	.sbyte "horizontal scrolling by rolling the character set bitmap images. "
 	.sbyte "This is the message.  Will it repeat? "
-	.sbyte "             It might!                           "                    
-	.byte  155
+	.sbyte "                    It might! "
+	.sbyte "                                        " ; 40 blanks to make sure text is gone.
+	.byte  155 ; ATASCII EOL, to mark end of text
 
-; Here is one reason why atasm rocks
+; Here is one reason why atasm rocks:
 ;
 ; This mass of typing:
 ; charlow byte $00,$08,$10,$18,$20,$28,$30,$38
