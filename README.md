@@ -13,3 +13,8 @@ This is originally from:
 https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
 This is an Atari port of a C64 example performing horizontal text scrolling using ROL on the character bitmaps.  The shifting parts function identically on the Atari as the C64, since both use the same bitmap organization for the character set. This version uses shorter looping code, but takes longer to execute.
 
+**font_left_scroll2.asm**
+
+This is originally from:
+https://github.com/graydefender/RandomStuff/blob/master/leftshift2.asm
+This is an Atari port of a C64 example performing horizontal text scrolling using ROL on the character bitmaps.  The shifting parts function identically on the Atari as the C64, since both use the same bitmap organization for the character set. This version uses unrolled direct code to ROL 320 bytes of font bitmap data.  The code is much larger, but executes faster.
