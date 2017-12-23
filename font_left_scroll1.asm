@@ -36,7 +36,7 @@
 	*=LOMEM_DOS_DUP ; Start "program" after DOS and DUP 
 
 	mAlign 1024 ; Align to the next 1K boundary for the soft font.
- 
+
 SOFT_CSET ; the scrolling character set
 	.ds $400 ; reserve this 1K  The progam will copy the ROM set here later.
 
@@ -55,6 +55,32 @@ Z_CH_FIRST = $FB
 Z_CH_NEXT  = $FD
 
 CODE_START
+
+;; --------------------------------------------------------------------
+;; A little Atari experiment.  Replace most of the text lines with 
+;; blank lines to see how it impacts the completion time.
+;; 
+;; When ANTIC is doing DMA for a full text screen it takes almost the
+;; entire frame for the ROL routine to complete.
+;;
+;; When most of the display is blank lines the ROL routine finishes in 
+;; 2/3 of a frame.
+;; --------------------------------------------------------------------
+;
+;	lda SDLSTL ; Display list, low byte
+;	sta $F8
+;	lda SDLSTH ; Display list, high byte
+;	sta $F9
+	
+;	ldy #10 ; 3 blank lines, 3 for line with lms, and 4 more lines following with text.
+;dl_substitute
+;	lda #DL_BLANK_8
+;	sta ($F8),Y
+;	iny
+;	cpy #29 ; up to the last (24th) line in the display list 
+;	bne dl_substitute
+	
+	
 
 ; ***********************************************************************************
 ; Step 1 Redefine char set    
@@ -271,11 +297,11 @@ continue_sc
 	; Restore the original screen colors from the OS shadow registers
 	; the hardware registers.
 
-	lda COLOR1
+	lda #$50 ; COLOR1
 	sta COLPF1	
-	lda COLOR2
+	lda #$5A ; COLOR2
 	sta COLPF2
-	lda COLOR4
+	lda #$F6 ; COLOR4
 	sta COLBK
 	
 	rts
