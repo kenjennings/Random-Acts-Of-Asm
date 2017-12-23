@@ -5,11 +5,12 @@
 ; Atari port of C64 program to horizontally scroll text via 
 ; character bitmap ROL.
 ;
-; Originally from:
+; C64 version originally from:
 ; https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
 ;
 ; 40 chars * 8 shifts == 320 shifts per frame.
 ;
+; https://github.com/kenjennings/Random-Acts-Of-Asm
 ; --------------------------------------------------------------------
  
 ;===============================================================================
