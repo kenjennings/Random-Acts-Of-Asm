@@ -18,6 +18,7 @@
 ; Various Include files that provide equates defining 
 ; registers and the values used for the registers.
 ;
+; For these include files refer to 
 ; https://github.com/kenjennings/Atari-Atasm-Includes
 ;
 	.include "ANTIC.asm" 
@@ -25,7 +26,7 @@
 	.include "POKEY.asm"
 	.include "PIA.asm"
 	.include "OS.asm"
-	.include "DOS.asm" ; This provides the LOMEM, start, and run addresses.
+	.include "DOS.asm" 
 
 	.include "macros.asm"
 
@@ -37,12 +38,17 @@
 	mAlign 1024 ; Align to the next 1K boundary for the soft font.
 
 SOFT_CSET ; the scrolling character set
+	.ds $400 ; reserve this 1K  The progam will copy the ROM set here later.
 
-	malign 1024 ; skip over the character set
 
 ; When copying the character image to the scrolling line...
 Z_ROM_SOURCE = $FB
-SCROLL_DEST  = SOFT_CSET+$340 ; aka the cset start of char 104 which is 64 + 40
+SCROLL_DEST  = SOFT_CSET+$340 ; This is offset to the 41st character 
+; in the scrolling characters.  The scrolling characters are offset
+; from  the 64th character in the character set. Therefore, 
+; 64 + 40 - 1  = character 103, the last visible character in the line.  
+; 103 + 1 is the buffer character, 104.   
+; 104 * 8 = 832 or byte offset $340 byte.
 
 ; When shifting bits...
 Z_CH_FIRST = $FB
@@ -78,13 +84,12 @@ loop_cset
 ; ***********************************************************************************
 	; For the Atari, this is similar.
 	; The numbers, most punctuation, and upper case are in the first 64 characters.
-	; So, the scrolling chars will start at character 64. 
+	; We want to keep those.
+	; So, the scrolling chars will start at character 64. (64 * 8 = 512 or $200)
 	; 40 characters need to be cleared, or $140 bytes.
 	
-	; y is already 0 from the code above
-	
-	lda #0
-loop_clear_cs1	; Clear the first $100 bytes of $140 bytes.
+;	lda #0  ; Y is already 0 from the code above
+loop_clear_cs1	; Clear the first $100 bytes of the $140 bytes. full page
 	sta SOFT_CSET+$200,Y
 	iny
 	bne loop_clear_cs1
@@ -94,7 +99,6 @@ loop_clear_cs2	; Clear the next $40 bytes
 	sta SOFT_CSET+$300,Y
 	dey
 	bpl loop_clear_cs2
-	
 
 ; ***********************************************************************************
 ; Step 3 - put redefined characters on a row on the screen
@@ -106,8 +110,8 @@ loop_clear_cs2	; Clear the next $40 bytes
 	ldy #$00
 	ldx #64 ; 40 chars starting at 64...65..., etc.
 loop_populate_screen
-	txa
-	sta (SAVMSC),Y  ;  SAVMSC = $58 ; word. Address of first byte of screen memory.
+	txa             ; transfer character number to A
+	sta (SAVMSC),Y  ; SAVMSC = $58 ; word. Address of first byte of screen memory.
 	inx
 	iny
 	cpy #40
@@ -116,7 +120,7 @@ loop_populate_screen
 	; A little Atari extra to label the running code markers on the screen.
 	jsr	Write_doc_msg
 	
-	lda #>SOFT_CSET ; Have to tell ANTIC to display the soft font or nothing moves.
+	lda #>SOFT_CSET ; Tell ANTIC to display the soft font or nothing will move.
 	sta CHBAS
 
 ; ***********************************************************************************
@@ -149,9 +153,8 @@ keepgoing
 	
 done               
 	rts
-                    
-                   
-                   
+
+
 ; ***********************************************************************************
 ; Subroutines Grab next char
 ; ***********************************************************************************
@@ -162,8 +165,9 @@ done
 	; reference through page 0 for the target location.
 	;
 	; Also, the source should not be the soft charset since 40 of the characters
-	; are being used for scrolling.  Using the ROM cset for source (or any other
-	; soft cset) then the entire "font" is available for the scroll.
+	; are being used for scrolling.  Using the ROM charset for source or any 
+	; other soft charset not participating in the scrolling then makes that 
+	; entire "font" available for the scroll.
 	;
 	; The other caveat is that "inverse" video is done by ANTIC and is not in 
 	; the font bitmap.  Therefore, to scroll an inverse character a different 
@@ -171,29 +175,33 @@ done
 	; as if it were inverse video.
 	
 grab_next_char
-	pha : Save screen character code for later.
+	pha ; Save screen character code for later.
 	; First, set up ROM as source
 	and #$7F ; remove high bit from character (for inverse)
 	sta Z_ROM_SOURCE
 	lda #$00
 	sta Z_ROM_SOURCE+1
-	; multiply by 8 to get the character's bitmap start address
+	; cheat multiply by 8 to get the character's bitmap start address
 	clc
-	rol Z_ROM_SOURCE
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from this
-	rol Z_ROM_SOURCE
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from this
-	rol Z_ROM_SOURCE
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from this
+	rol Z_ROM_SOURCE   ; * 2
+	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
+	rol Z_ROM_SOURCE   ; * 4
+	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
+	rol Z_ROM_SOURCE   ; * 8
+	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
 	; Add to the ROM address
+	clc
 	lda Z_ROM_SOURCE+1
-	adc #$E0  ; Or this could be the chbas for a custom character.
+	adc #$E0  ; $E0 is ROM. Or this could be the high byte for a custom charset address.
 	sta Z_ROM_SOURCE+1
+	
+	; Copy the character image.
+	ldy #7
 	
 	pla ; restore original character
 	bmi copy_inverse_char ; if high bit is set then this is an inverse video char
+
 copy_regular_char
-	ldy #7
 	lda (Z_ROM_SOURCE),y
 	sta SCROLL_DEST,y
 	dey
@@ -201,12 +209,11 @@ copy_regular_char
 	rts
 
 copy_inverse_char
-	ldy #7
 	lda (Z_ROM_SOURCE),y
 	eor #$FF
 	sta SCROLL_DEST,y
 	dey
-	bpl copy_regular_char
+	bpl copy_inverse_char
 	rts
 
 
@@ -215,12 +222,13 @@ copy_inverse_char
 ; ***********************************************************************************
 
 shiftchar     
-	jsr Smooth_Scroll     ; Wait until scan line is after the text beine scrolled. 
-	
+	jsr Smooth_Scroll ; Wait until scan line is after the text being scrolled. Then 
+					  ; turn on the visual indicators to show processing.
+ 
 	ldx #00           ; start at the first character on the line
 	
 loop_shift_char
-	txa
+	txa               ; Transfer X to Y for the copying below and to preserve X for loop.
 	tay                    
 	lda charhi,y      ; Z_CH_FIRST = charlookup[Y]
 	sta Z_CH_FIRST+1
@@ -235,15 +243,14 @@ loop_shift_char
 	sta Z_CH_NEXT
 	
 	ldy #7
+	
 loop_a_to_b
-
 	lda (Z_CH_NEXT),y ; Get from the last/next/right-most char...
-	and	#~10000000    ; Check if it has high bit set
-	bne set_c         ; Yes.  
+	bmi set_c         ; Check if it has high bit set
 
-clr_c                 ; No.  Clear Carry
+clr_c                 ; No. Clear Carry
 	clc
-	jmp continue_sc
+	bcc continue_sc
 	
 set_c                 ; Yes. Set Carry
 	sec
@@ -256,15 +263,20 @@ continue_sc
 	dey                ; go to next byte in bitmap
 	bpl loop_a_to_b    ; counting down 7...to...0.  $FF is negative
 	
-	; I'm kind wondering here about the 41-ness below.
-	; 40 displayed characters means the characters are numbered 0 to 39.
-	; Therefore the buffer character being rolled into the 39th is the 40th.
-	; Therefore the maximum values for FIRST is 39, and NEXT is 40.
-	; Then this loop appears to run up to FIRST = 40, and NEXT = 41 and 
-	; the 41st should not be visible, even partly on the screen. ?
 	inx                 ; next character position
 	cpx #41             ; have we reached the end?
 	bne loop_shift_char ; No.  do the next character.
+	
+	; A shift is done! turn off the processing indicators.  
+	; Restore the original screen colors from the OS shadow registers
+	; the hardware registers.
+
+	lda COLOR1
+	sta COLPF1	
+	lda COLOR2
+	sta COLPF2
+	lda COLOR4
+	sta COLBK
 	
 	rts
 
@@ -272,46 +284,26 @@ continue_sc
 ; Subroutine  Smooth_Scroll
 ; ***********************************************************************************
 
-Smooth_Scroll
-;;@w1                 bit $d011                       ; Wait for Raster to be off screen 
-;;                    bpl @w1 
-;;@w2                 bit $d011 
-;;                    bmi                 @w2                 
+Smooth_Scroll                                      ; Wait for Raster to be off screen 
 
-; for the Atari we're going to have an on screen visual indicator of where the 
-; processing stops and starts.  So on entry assume we're not in the correct position, 
-; and reassert the correct screen colors from the OS shadow registers.
+	; wait for the scan line AFTER the scrolling line, so that the bitmap 
+	; ROL'ing is not applied while the video is fetching the bitmap for display. 
 
-	lda COLOR1
-	sta COLPF1
-	lda COLOR2
-	sta COLPF2
-	lda COLOR4
-	sta COLBK
-	
 smooth_scroll_loop
-;                    lda                 $D012               
-;                    cmp #100
-;                    bcc                 @loop
-;                    rts
-
-	; I think the idea here is to wait for a scan line AFTER the scrolling line, so that
-	; the font bitmap ROL'ing is not applied while the text line is being displayed. 
-
 	lda VCOUNT
-	cmp #29 ; 24 blank lines, plus 8 * four lines of text (32), = 56, divided by 2 = 28. Start at +1
+	cmp #20 ; video offset 8, + 24 blank lines, + 8 for scroll line = 40.  / by 2 = 20.
 	bne smooth_scroll_loop
 	
-	; We're at the correct position. Change border and playfield color to 
-	; identify when we're processing. 
-	
-	lda #$C6   ; It's not easy being green. 
-	sta COLPF1
+	; Change border and playfield color to identify when we're processing. 
+
+	lda #[COLOR_GREEN+$08]   ; It's not easy being green...
 	sta COLPF2
 	sta COLBK
 	
+	lda #COLOR_BLACK
+	sta COLPF1 ; make text black.
+	
 	rts
-
 
 ; ***********************************************************************************
 ; Extra Atari stuff.  Little bit-o-docs.  Explain the run-time markers on screen.
@@ -320,22 +312,24 @@ smooth_scroll_loop
 Write_doc_msg
 	ldx #0  ; index into Doc_msg text.
 	ldy #80 ; index into screen RAM. Start on 3rd line. 
-			; This leaves 176 characters for direct index.
-write_more
-	lda Doc_msg,x   ; get a character from the string .
-	cmp #155        ; Is it ATASCII EOL?  Stop here.
-	beq Exit_write_doc_msg
-	sta (SAVMSC),Y  ;  Poke it to screen memory. 
+			; This leaves 175 characters for direct index.
+
+write_more                  ; Poke chars to screen until we hit EOL.
+	lda Doc_msg,x           ; get a character from the string .
+	cmp #155                ; Is it ATASCII EOL?  
+	beq Exit_write_doc_msg  ; Yes.  Stop here.
+	sta (SAVMSC),Y          ;  Poke it to screen memory. 
 	inx
 	iny 
-	bne write_more  ; Do until we hit EOL.
+	bne write_more  ; Stop when we exceed max index range.  
 	
 Exit_write_doc_msg
 	rts
 	
 Doc_msg
 	.sbyte "THE GREEN COLOR IS THE TIME SPENT       "
-	.sbyte "RUNNING THE ROL CODE."
+	.sbyte "RUNNING THE ROL CODE.  YES, IT'S THE    "
+	.sbyte "WHOLE FRAME.  LOOPING IS SLOW."
 	.byte 155
 
 
@@ -351,7 +345,7 @@ xsave	.byte $00
 
 newmessage 
 	.sbyte "Hello, this is a test scroll on the Atari version of gray defender's C64 "
-	.sbyte "horizontal scrolling by rolling the character set bitmap images. "
+	.sbyte "horizontal scrolling by ROL'ing the character set bitmap images. "
 	.sbyte "This is the message.  Will it repeat? "
 	.sbyte "                    It might! "
 	.sbyte "                                        " ; 40 blanks to make sure text is gone.
