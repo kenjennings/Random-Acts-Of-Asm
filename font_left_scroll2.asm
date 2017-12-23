@@ -2,10 +2,11 @@
 ; 6502 assembly on Atari.
 ; Built with eclipse/wudsn/atasm.
 ;
-; Atari port of C64 program to horizontally scrol text via character bitmap ROL.
+; Atari port of C64 program to horizontally scroll text 
+; via character bitmap ROL.
 ;
 ; Originally from:
-; https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
+; https://github.com/graydefender/RandomStuff/blob/master/leftshift2.asm
 ;
 ; 40 chars * 8 shifts == 320 shifts per frame.
 ;
