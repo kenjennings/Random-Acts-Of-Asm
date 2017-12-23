@@ -5,7 +5,7 @@ Also refer to **HelloWhirled** repository at https://github.com/kenjennings/Hell
 
 **GTIA256.asm**
 
-Sets up a simple GTIA mode 9 display (16 grey scales) and uses DLIs to change the base color 16 times to display all 256 GTIA colors.
+Sets up a simple GTIA mode 9 display (16 grey scales) and uses Display List Interupts to change the base color at 16 places on screen to show all 256 GTIA colors on a single display.
 
 It's not a real GTIA mode 9 display.  There is only one line of screen memory defined that shows pixels from color 0 to 15 across the width of the screen:
 
