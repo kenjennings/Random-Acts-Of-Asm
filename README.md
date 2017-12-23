@@ -5,7 +5,7 @@ Also refer to HelloWhirled repository at https://github.com/kenjennings/HelloWhi
 
 **GTIA256.asm**
 
-Sets up a simple GTIA mode 9 display (16 grey scales) and uses a DLI to display all 256 GTIA colors.
+Sets up a simple GTIA mode 9 display (16 grey scales) and uses DLIs to change the base color 16 times to display all 256 GTIA colors.
 
 **font_left_scroll1.asm**
 
