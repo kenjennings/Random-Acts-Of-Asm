@@ -36,7 +36,7 @@
 	*=LOMEM_DOS_DUP ; Start "program" after DOS and DUP 
 
 	mAlign 1024 ; Align to the next 1K boundary for the soft font.
-
+ 
 SOFT_CSET ; the scrolling character set
 	.ds $400 ; reserve this 1K  The progam will copy the ROM set here later.
 
