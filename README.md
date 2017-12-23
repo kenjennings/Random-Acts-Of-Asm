@@ -1,7 +1,7 @@
 # Random-Acts-Of-Asm
 Random bits and bytes of Atari 6502 assembly.
 
-Also refer to HelloWhirled repository at https://github.com/kenjennings/HelloWhirled which includes several conventional and weird ways to output text to the screen.
+Also refer to HelloWhirled repository at https://github.com/kenjennings/HelloWhirled which includes several conventional and weird ways to output text to the Atari's screen.
 
 **GTIA256.asm**
 
