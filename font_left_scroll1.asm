@@ -111,6 +111,9 @@ loop_populate_screen
 	iny
 	cpy #40
 	bne loop_populate_screen
+
+	; A little Atari extra to label the running code markers on the screen.
+	jsr	Write_doc_msg
 	
 	lda #>SOFT_CSET ; Have to tell ANTIC to display the soft font or nothing moves.
 	sta CHBAS
@@ -213,7 +216,7 @@ copy_inverse_char
 shiftchar     
 	jsr Smooth_Scroll     ; Wait until scan line is after the text beine scrolled. 
 	
-	ldx #00           ; start at the first charater on the line
+	ldx #00           ; start at the first character on the line
 	
 loop_shift_char
 	txa
@@ -278,6 +281,8 @@ Smooth_Scroll
 ; processing stops and starts.  So on entry assume we're not in the correct position, 
 ; and reassert the correct screen colors from the OS shadow registers.
 
+	lda COLOR1
+	sta COLPF1
 	lda COLOR2
 	sta COLPF2
 	lda COLOR4
@@ -293,17 +298,44 @@ smooth_scroll_loop
 	; the font bitmap ROL'ing is not applied while the text line is being displayed. 
 
 	lda VCOUNT
-	cmp #17 ; 24 blank lines, plus 8 for top text line, divided by 2 = 16. Start at +1
+	cmp #29 ; 24 blank lines, plus 8 * four lines of text (32), = 56, divided by 2 = 28. Start at +1
 	bne smooth_scroll_loop
 	
 	; We're at the correct position. Change border and playfield color to 
 	; identify when we're processing. 
 	
 	lda #$C6   ; It's not easy being green. 
+	sta COLPF1
 	sta COLPF2
 	sta COLBK
 	
 	rts
+
+
+; ***********************************************************************************
+; Extra Atari stuff.  Little bit-o-docs.  Explain the run-time markers on screen.
+; ***********************************************************************************
+
+Write_doc_msg
+	ldx #0  ; index into Doc_msg text.
+	ldy #80 ; index into screen RAM. Start on 3rd line. 
+			; This leaves 176 characters for direct index.
+write_more
+	lda Doc_msg,x   ; get a character from the string .
+	cmp #155        ; Is it ATASCII EOL?  Stop here.
+	beq Exit_write_doc_msg
+	sta (SAVMSC),Y  ;  Poke it to screen memory. 
+	inx
+	iny 
+	bne write_more  ; Do until we hit EOL.
+	
+Exit_write_doc_msg
+	rts
+	
+Doc_msg
+	.sbyte "THE GREEN COLOR IS THE TIME SPENT       "
+	.sbyte "RUNNING THE ROL CODE."
+	.byte 155
 
 
 ; ***********************************************************************************
