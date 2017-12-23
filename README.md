@@ -24,7 +24,7 @@ SCREEN_MEM
 	.byte $ee,$ee,$ef,$ff,$ff
 ```
 
-The display list for the screen uses LMS with all the ANTIC instructions, and so displays the same screen data for every line on the screen.
+All the ANTIC mode instructions in the Display List include LMS pointing to the same screen memory, so the entire display is populated with the same line of graphics. 
 
 [![GTIA256](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.png)](#GTIA256)
 
