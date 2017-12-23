@@ -7,6 +7,25 @@ Also refer to **HelloWhirled** repository at https://github.com/kenjennings/Hell
 
 Sets up a simple GTIA mode 9 display (16 grey scales) and uses DLIs to change the base color 16 times to display all 256 GTIA colors.
 
+It's not a real GTIA mode 9 display.  There is only one line of screen memory defined that shows pixels from color 0 to 15 across the width of the screen:
+
+```asm
+; Each Block on screen is 5 GTIA pixels wide.
+; Blocks range from value 0 to 15.
+
+SCREEN_MEM
+	.byte $00,$00,$01,$11,$11
+	.byte $22,$22,$23,$33,$33
+	.byte $44,$44,$45,$55,$55
+	.byte $66,$66,$67,$77,$77
+	.byte $88,$88,$89,$99,$99
+	.byte $aa,$aa,$ab,$bb,$bb
+	.byte $cc,$cc,$cd,$dd,$dd
+	.byte $ee,$ee,$ef,$ff,$ff
+```
+
+The display list for the screen uses LMS with all the ANTIC instructions, and so displays the same screen data for every line on the screen.
+
 [![GTIA256](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.png)](#GTIA256)
 
 
