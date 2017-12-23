@@ -5,12 +5,13 @@
 ; Atari port of C64 program to horizontally scroll text via 
 ; character bitmap ROL.
 ;
-; Originally from:
+; Original C64 version from:
 ; https://github.com/graydefender/RandomStuff/blob/master/leftshift2.asm
 ;
 ; This version unrolls the more compact loop code into a series of 
 ; explicit ROL blocks.   Bigger code, but executes much faster.
 ;
+; https://github.com/kenjennings/Random-Acts-Of-Asm
 ; --------------------------------------------------------------------
  
 ;===============================================================================
