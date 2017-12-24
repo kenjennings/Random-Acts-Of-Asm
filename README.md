@@ -44,6 +44,8 @@ The program includes a few extra bells and whistles to provide visual feedback o
 
 So, why would someone want to do scrolling through a bitmap when hardware scrolling on the Atari is nearly magical?  This method allows one to mix multiple fonts and graphics in the scrolling content.  Also, the scan lines could be scrolled at different speeds allowing different kinds of animation that would be harder to do with the hardware scrolling.
 
+YouTube video: https://youtu.be/oMa2MsVkeGk
+
 [![font_left_scroll1](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.png)](#font_left_scroll1)
 
 ---
