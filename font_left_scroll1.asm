@@ -5,12 +5,11 @@
 ; Atari port of C64 program to horizontally scroll text via 
 ; character bitmap ROL.
 ;
-; C64 version originally from:
+; Originally from:
 ; https://github.com/graydefender/RandomStuff/blob/master/leftshift.asm
 ;
 ; 40 chars * 8 shifts == 320 shifts per frame.
 ;
-; https://github.com/kenjennings/Random-Acts-Of-Asm
 ; --------------------------------------------------------------------
  
 ;===============================================================================
@@ -56,6 +55,19 @@ Z_CH_FIRST = $FB
 Z_CH_NEXT  = $FD
 
 CODE_START
+
+; --------------------------------------------------------------------
+; Turn off screen for a moment and pause to provide time to 
+; manage the screen capture.
+; --------------------------------------------------------------------
+
+	lda #$00
+	sta SDMCTL ; screen off.
+	
+	jsr long_pause ; wait 4 sec to give time to manage video capture.
+	
+	lda #[ENABLE_DL_DMA|PLAYFIELD_WIDTH_NORMAL]
+	sta SDMCTL ; screen on
 
 ;; --------------------------------------------------------------------
 ;; A little Atari experiment.  Replace most of the text lines with 
@@ -179,6 +191,17 @@ keepgoing
 	jmp keepgoing  
 	
 done               
+
+; turn off display and pause to allow for managing the screen capture.
+
+	lda #$00
+	sta SDMCTL
+	
+	jsr long_pause ; wait 4 sec to give time to manage video capture.
+	
+	lda #[ENABLE_DL_DMA|PLAYFIELD_WIDTH_NORMAL]
+	sta SDMCTL ; screen on
+
 	rts
 
 
@@ -298,11 +321,11 @@ continue_sc
 	; Restore the original screen colors from the OS shadow registers
 	; the hardware registers.
 
-	lda #$50 ; COLOR1
+	lda COLOR1 
 	sta COLPF1	
-	lda #$5A ; COLOR2
+	lda COLOR2 
 	sta COLPF2
-	lda #$F6 ; COLOR4
+	lda COLOR4 
 	sta COLBK
 	
 	rts
@@ -359,6 +382,22 @@ Doc_msg
 	.sbyte "WHOLE FRAME.  LOOPING IS SLOW."
 	.byte 155
 
+; ***********************************************************************************
+; Long Pause
+; Provide a short wait to get the bleeping video capture sorted.
+; ***********************************************************************************
+
+long_pause
+	lda #0
+	sta RTCLOK60   ; increments every jiffy
+	sta RTCLOK+1   ; increments every 4.27 sec.
+	
+pausing
+	cmp RTCLOK+1
+	beq pausing   ; This should take 4.27 sec to change.
+	
+	rts
+	
 
 ; ***********************************************************************************
 ; Other Variables and Data
