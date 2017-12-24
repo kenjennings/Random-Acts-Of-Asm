@@ -42,6 +42,8 @@ This version uses smaller looping code, but takes much longer to execute.  It ru
 
 The program includes a few extra bells and whistles to provide visual feedback of the amount of time per frame used for the shifting, plus additional on-screen text to explain the visual indicator. 
 
+So, why would someone want to do scrolling through a bitmap when hardware scrolling on the Atari is nearly magical?  This method allows one to mix multiple fonts and graphics in the scrolling content.  Also, the scan lines could be scrolled at different speeds allowing different kinds of animation that would be harder to do with the hardware scrolling.
+
 [![font_left_scroll1](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.png)](#font_left_scroll1)
 
 ---
