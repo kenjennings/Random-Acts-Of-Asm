@@ -3,6 +3,8 @@ Random bits and bytes of Atari 6502 assembly.
 
 Also refer to **HelloWhirled** repository at https://github.com/kenjennings/HelloWhirled which includes several conventional and some bizzare and weird ways to make text appear on the Atari's screen.
 
+---
+
 **GTIA256.asm**
 
 Sets up a simple GTIA mode 9 display (16 grey scales) and uses Display List Interupts to change the base color at 16 places on screen to show all 256 GTIA colors on a single display.
@@ -28,6 +30,7 @@ All the ANTIC mode instructions in the Display List include LMS pointing to the 
 
 [![GTIA256](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.png)](#GTIA256)
 
+---
 
 **font_left_scroll1.asm**
 
@@ -41,6 +44,7 @@ The program includes a few extra bells and whistles to provide visual feedback o
 
 [![font_left_scroll1](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.png)](#font_left_scroll1)
 
+---
 
 **font_left_scroll2.asm**
 
