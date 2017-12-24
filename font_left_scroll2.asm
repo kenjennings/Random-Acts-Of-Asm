@@ -5,13 +5,12 @@
 ; Atari port of C64 program to horizontally scroll text via 
 ; character bitmap ROL.
 ;
-; Original C64 version from:
+; Originally from:
 ; https://github.com/graydefender/RandomStuff/blob/master/leftshift2.asm
 ;
 ; This version unrolls the more compact loop code into a series of 
 ; explicit ROL blocks.   Bigger code, but executes much faster.
 ;
-; https://github.com/kenjennings/Random-Acts-Of-Asm
 ; --------------------------------------------------------------------
  
 ;===============================================================================
@@ -83,6 +82,20 @@ Const_Char8	= SOFT_CSET+$207
 
 CODE_START
 
+; --------------------------------------------------------------------
+; Turn off screen for a moment and pause to provide time to 
+; manage the screen capture.
+; --------------------------------------------------------------------
+
+	lda #$00
+	sta SDMCTL ; screen off
+	
+	jsr long_pause ; wait 4 sec to give time to manage video capture.
+	
+	lda #[ENABLE_DL_DMA|PLAYFIELD_WIDTH_NORMAL]
+	sta SDMCTL ; screen on
+
+
 ; ***********************************************************************************
 ; Step 1 Redefine char set    
 ; ***********************************************************************************
@@ -116,6 +129,7 @@ loop_cset
 	; 40 characters need to be cleared, or $140 bytes.
 	
 ;	lda #0  ; Y is already 0 from the code above
+
 loop_clear_cs1	; Clear the first $100 bytes of the $140 bytes. full page
 	sta SOFT_CSET+$200,Y
 	iny
@@ -136,6 +150,7 @@ loop_clear_cs2	; Clear the next $40 bytes
 	
 	ldy #$00
 	ldx #64 ; 40 chars starting at 64...65..., etc.
+
 loop_populate_screen
 	txa             ; transfer character number to A
 	sta (SAVMSC),Y  ; SAVMSC = $58 ; word. Address of first byte of screen memory.
@@ -157,7 +172,8 @@ loop_populate_screen
 	; However, blank space is 0 value on Atari, so a different end of string
 	; flag is needed.  Here, this is CHR$(155) which is the Atascii EOL.
 	
-	ldx #0                  
+	ldx #0   
+	               
 keepgoing
 	lda newmessage,X
 	cmp #155 ; ATASCII EOL
@@ -170,7 +186,17 @@ keepgoing
 	inx
 	jmp keepgoing  
 	
-done               
+done     
+	; turn off display and pause to allow for managing the screen capture.
+
+	lda #$00
+	sta SDMCTL
+	
+	jsr long_pause ; wait 4 sec to give time to manage video capture.
+	
+	lda #[ENABLE_DL_DMA|PLAYFIELD_WIDTH_NORMAL]
+	sta SDMCTL ; screen on
+         
 	rts
 
 
@@ -331,6 +357,22 @@ Doc_msg
 	.sbyte "IS MUCH FASTER, BUT MUCH BIGGER CODE.   "
 	.byte 155
 
+; ***********************************************************************************
+; Long Pause
+; Provide a short wait to get the bleeping video capture sorted.
+; ***********************************************************************************
+
+long_pause
+	lda #0
+	sta RTCLOK60   ; increments every jiffy
+	sta RTCLOK+1   ; increments every 4.27 sec.
+	
+pausing
+	cmp RTCLOK+1
+	beq pausing   ; This should take 4.27 sec to change.
+	
+	rts
+	
 
 ; ***********************************************************************************
 ; Other Variables and Data
