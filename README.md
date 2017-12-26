@@ -74,7 +74,7 @@ YouTube video: https://youtu.be/GZYwHxWiN0U
 
 The Atari always has more than one way to solve a problem.  Here is another way to horizontally scroll text without using the hardware scrolling features.  This version uses bit-mapped graphics memory instead of the soft character set used in font_left_scroll1.asm, and font_left_scroll2.asm above.  
 
-Since Atari graphics us linear memory rather than a character set-like arrangement this provides a few advantages.  The shifting is going through a straight line of memory, so looping code can be used that does not require extra address manipulation in each pass.  This results in much faster code than the original font_left_scroll1 demo, and while this program retains loops for shifting the bitmaps it is only a little slower than the large code resulting from the unrolled loops for font_left_scroll2.
+Since Atari graphics use linear memory rather than a character set-like arrangement this provides a few advantages.  The shifting is going through sequential bytes of memory, so looping code can be used that does not require extra address manipulation in each pass.  This results in much faster code than the original font_left_scroll1 demo, and while this program retains loops for shifting the bitmaps it is only a little slower than the large code resulting from the unrolled loops in font_left_scroll2.
 
 ---
 
