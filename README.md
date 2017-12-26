@@ -2,7 +2,7 @@
 Random bits and bytes of Atari 6502 assembly.
 
 | Topic | Program | Summary | 
-| ===== | ======= | ======= |
+| ----- | ------- | ------- |
 | Color, Color, Color | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
 | "Writing" Text | [ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen (E: device.) |
 | | [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen (E: device.)  It reduces the IOCB setup by calling the PUT CHAR vector set in the IOCB channel set up for BASIC. |
