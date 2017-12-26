@@ -13,7 +13,7 @@ Random bits and bytes of Atari 6502 assembly.
 | Horizontal Scrolling | [font_left_scroll1.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.asm "font_left_scroll1.asm") | Scroll text by shifting character bitmaps through a sequential line of characters in a soft character set. |
 | | [font_left_scroll2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll2.asm "font_left_scroll2.asm") | Same program as font_left_scroll1 with loops unrolled to dramatically improve execution time. |
 | | [left_scroll3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll3.asm "left_scroll3.asm") | Scroll text by shifting character bitmaps through lines of bitmapped graphics. Faster than font_left_scroll1.asm above, and smaller code than font_left_scroll2. |
-| | [left_scroll4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll4.asm "left_scroll4.asm") | For sake of comparison this how it looks with real hardware scrolling.  Magically fast and small code. |
+| | [left_scroll4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll4.asm "left_scroll4.asm") | For sake of comparison this is how it looks done in real hardware scrolling.  Magically fast and small code. |
 
 ---
 
