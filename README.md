@@ -64,4 +64,35 @@ This version uses unrolled direct code to ROL 320 bytes of font bitmap data.  Th
 
 The program includes a few extra bells and whistles to provide visual feedback of the amount of time per frame used for the shifting, plus additional on-screen text to explain the visual indicator. 
 
+---
+
+**left_scroll3.asm**
+
+YouTube video: https://youtu.be/GZYwHxWiN0U
+
+[![left_scroll3](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll3.png)](#left_scroll3)
+
+The Atari always has more than one way to solve a problem.  Here is another way to horizontally scroll text without using the hardware scrolling features.  This version uses bitmapped graphics memory instead of the soft character set used in font_left_scroll1.asm, and font_left_scroll2.asm above.  
+
+Since Atari graphics us linear memory rather than a character set-like arrangement this provides a few advantages.  The shifting is going through a straight line of memory, so looping code can be used that does not require extra address manipulation in each pass.  This results in much faster code than the original font_left_scroll1 demo, and while this program retains loops for shifting the bitmaps it is only a little slower than the large code resulting from the unrolled loops for font_left_scroll2.
+
+---
+
+**left_scroll4.asm**
+
+YouTube video: https://youtu.be/BfNkqKnDSgg
+
+[![left_scroll4](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll4.png)](#left_scroll4)
+
+For comparison purposes with the other three scrolling demos above, this is what the code for Atari's hardware fine scrolling looks like.  
+
+The hardware feature is so stupidly fast the green block showing the CPU time used for scrolling in the other scrolling demos is now reduced to a fraction of a single scan line.
+
+Since the fine scrolling feature is based on color clocks, the scrolling is so fast the text is not readable.  To scale it down to the speed of the other scrolling demos this program skips an entire frame between updates to make the animation occur at 30fps rather than 60fps.
+
+This is so fast and efficient, because "moving" the characters is never moving anything.  Fine scrolling "moves" the displayed text the distance of four characters (16 color clocks)  by writing one value to a hardware register each frame.  Coarse scrolling to reset the scrolling and continue the motion also does not move any characters at all.  The only thing that happens for coarse scrolling is incrementting a two-byte pointer to the new starting address of the display line.  Most other computers would have to do coarse scrolling by updating all 40 characters in the row.  
+
+The only computer I'm aware of that can do scrolling similarly to the Atari 8-bits is the Amiga (though, only bit-mapped based the screen display is still controlled by fiddling with a couple pointers in registers rather than actually moving data through screen RAM.)
+
+We've done the advatages of the hardware features, so, now here's the disadvantage:  Since the screen data for the other three scrolling demos is in bitmapped screen memory, ANY character or graphics image can be introduced to the scrolling line without limit.  In this hardware scrolling example everything that appears on the line must be represented in the same character font.  Within the width of the screen that text line cannot mix another font or graphics unless those images are part of the same character set.  Switching fonts would switch the images of all the text currently displayed on the line.  Therefore, there must be some overlap or identical characters in two different fonts.  The alternative is that the text line must be cleared before changing fonts.  
 
