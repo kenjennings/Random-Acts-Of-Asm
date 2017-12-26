@@ -180,7 +180,7 @@ scroll_o_matic
 	dex                ; moving the fine scroll -1 color clock moves display to left.
 	bmi coarse_scroll  ; scroll went from 0 to negative.  time to coarse scroll.
 
-	stx HSCROL         ; Set net fine scroll
+	stx HSCROL         ; Set next fine scroll
 	jmp scroll_o_matic ; go wait for the next frame.
 	
 coarse_scroll
