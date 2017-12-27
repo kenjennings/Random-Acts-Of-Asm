@@ -7,8 +7,8 @@ Random bits and bytes of Atari 6502 assembly.
 | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
 | [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo. |
 | [rbd2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd2.asm") | The World's Smallest Raster Bar Demo. (with smaller color bars) |
-| [rbd3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd3.asm") | The World's Smallest Raster Bar Demo. (with smaller color bars and vertical movement) |
-| [rbd4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd4.asm") | The World's Smallest Raster Bar Demo. (with vertical positioning, smaller color bars and two different vertical movements.) |
+| [rbd3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd3.asm "rbd3.asm") | The World's Smallest Raster Bar Demo. (with smaller color bars and vertical movement) |
+| [rbd4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd4.asm "rbd4.asm") | The World's Smallest Raster Bar Demo. (with vertical positioning, smaller color bars and two different vertical movements.) |
 | **"Writing" Text** |
 |[ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen (E: device.) |
 | [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen (E: device.)  It reduces the IOCB set up by calling Atari BASIC's PUT CHAR vector in the IOCB channel. |
@@ -27,6 +27,44 @@ Random bits and bytes of Atari 6502 assembly.
 **GTIA256.asm**
 
 [![GTIA256](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.png)](#GTIA256)
+
+Sets up a simple GTIA mode 9 display (16 grey scales) and uses Display List Interupts to change the base color at 16 places on screen to show all 256 GTIA colors on a single display.
+
+It's not a real GTIA mode 9 display.  There is only one line of screen memory defined that shows pixels from color 0 to 15 across the width of the screen:
+
+```asm
+; Each Block on screen is 5 GTIA pixels wide.
+; Blocks range from value 0 to 15.
+
+SCREEN_MEM
+	.byte $00,$00,$01,$11,$11
+	.byte $22,$22,$23,$33,$33
+	.byte $44,$44,$45,$55,$55
+	.byte $66,$66,$67,$77,$77
+	.byte $88,$88,$89,$99,$99
+	.byte $aa,$aa,$ab,$bb,$bb
+	.byte $cc,$cc,$cd,$dd,$dd
+	.byte $ee,$ee,$ef,$ff,$ff
+```
+
+All the ANTIC mode instructions in the Display List include LMS pointing to the same screen memory, so the entire display is populated with the same line of graphics. 
+
+---
+
+**twsrbd.asm**
+
+[![twsrbd.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.png)](#twsrbd.png)
+
+The World's Smallest Raster Bar Demo.
+
+All it does is copy ANTIC's scan line counter to the background color:
+
+```asm
+	lda VCOUNT    ; Load VCOUNT scan line counter
+	sta COLBK     ; COLOR!
+```
+
+That's all it is.
 
 Sets up a simple GTIA mode 9 display (16 grey scales) and uses Display List Interupts to change the base color at 16 places on screen to show all 256 GTIA colors on a single display.
 
