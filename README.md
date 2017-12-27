@@ -6,9 +6,7 @@ Random bits and bytes of Atari 6502 assembly.
 | **Color, Color, Color** |
 | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
 | [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo.
- 
 Essentially just two instructions for the color bars.
-
 ```asm
 	lda VCOUNT
 	sta COLBK
