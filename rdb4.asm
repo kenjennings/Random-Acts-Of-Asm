@@ -2,7 +2,7 @@
 ; 6502 assembly on Atari.
 ; Built with eclipse/wudsn/atasm.
 ;
-; The World's Smallest Raster Bar Demo (with vertical positioning, smaller color bars and twice vertical movement vertical movement)
+; The World's Smallest Raster Bar Demo (with vertical positioning, smaller color bars and two different vertical movements.)
 ;
 ; Wait for specific screen position.
 ; Load value of jiffy counter.
