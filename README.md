@@ -5,12 +5,10 @@ Random bits and bytes of Atari 6502 assembly.
 | ------- | ------- |
 | **Color, Color, Color** |
 | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
-| [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo.
-Essentially just two instructions for the color bars.
-```asm
-	lda VCOUNT
-	sta COLBK
-``` |
+| [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo. |
+| [rbd2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd2.asm") | The World's Smallest Raster Bar Demo. (with smaller color bars) |
+| [rbd3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd3.asm") | The World's Smallest Raster Bar Demo. (with smaller color bars and vertical movement) |
+| [rbd4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd4.asm") | The World's Smallest Raster Bar Demo. (with vertical positioning, smaller color bars and two different vertical movements.) |
 | **"Writing" Text** |
 |[ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen (E: device.) |
 | [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen (E: device.)  It reduces the IOCB set up by calling Atari BASIC's PUT CHAR vector in the IOCB channel. |
