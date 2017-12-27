@@ -1,19 +1,22 @@
 # Random-Acts-Of-Asm
 Random bits and bytes of Atari 6502 assembly.
 
-| Topic | Program | Summary | 
-| ----- | ------- | ------- |
-| Color, Color, Color | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
-| "Writing" Text | [ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen (E: device.) |
-| | [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen (E: device.)  It reduces the IOCB set up by calling Atari BASIC's PUT CHAR vector in the IOCB channel. |
-| | [ATARI_ATASM_DIRECTWRITE.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DIRECTWRITE.asm "ATARI_ATASM_DIRECTWRITE.asm") | Uses the OS's Page 0 pointer to the current display to write (or, POKE) directly into screen memory. |
-| | [ATARI_ATASM_DISPLAYLIST.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DISPLAYLIST.asm "ATARI_ATASM_DISPLAYLIST.asm") | Display text without executing any code. Uses the Atari's executable load file to replace the OS's default display list LMS address operand's value with the address of the desired text string in memory. |
-| | [ATARI_ATASM_DISPLAYLIST_EXTRA.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DISPLAYLIST_EXTRA.asm "ATARI_ATASM_DISPLAYLIST_EXTRA.asm") |  Display text without executing any code. Uses the Atari's executable load file to load a minimal display list showing the text, and directly updates the OS's ANTIC shadow registers to install the display list. |
-| | [ATARI_ATASM_SCREENRAM.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_SCREENRAM.asm "ATARI_ATASM_SCREENRAM.asm") | Display text without executing any code. Uses the Atari's executable load file to load the text directly into the screen RAM for the OS's default text display. |
-| Horizontal Scrolling | [font_left_scroll1.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.asm "font_left_scroll1.asm") | Scroll text by shifting character bitmaps through a sequential line of characters in a soft character set. |
-| | [font_left_scroll2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll2.asm "font_left_scroll2.asm") | Same program as font_left_scroll1 with loops unrolled to dramatically improve execution time. |
-| | [left_scroll3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll3.asm "left_scroll3.asm") | Scroll text by shifting character bitmaps through lines of bitmapped graphics. Faster than font_left_scroll1.asm above, and smaller code than font_left_scroll2. |
-| | [left_scroll4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll4.asm "left_scroll4.asm") | For sake of comparison this is how it looks done in real hardware scrolling.  Magically fast and small code. |
+| Program | Summary | 
+| ------- | ------- |
+| Color, Color, Color |
+| [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
+| "Writing" Text |
+|[ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen (E: device.) |
+| [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen (E: device.)  It reduces the IOCB set up by calling Atari BASIC's PUT CHAR vector in the IOCB channel. |
+| [ATARI_ATASM_DIRECTWRITE.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DIRECTWRITE.asm "ATARI_ATASM_DIRECTWRITE.asm") | Uses the OS's Page 0 pointer to the current display to write (or, POKE) directly into screen memory. |
+| [ATARI_ATASM_DISPLAYLIST.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DISPLAYLIST.asm "ATARI_ATASM_DISPLAYLIST.asm") | Display text without executing any code. Uses the Atari's executable load file to replace the OS's default display list LMS address operand's value with the address of the desired text string in memory. |
+| [ATARI_ATASM_DISPLAYLIST_EXTRA.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DISPLAYLIST_EXTRA.asm "ATARI_ATASM_DISPLAYLIST_EXTRA.asm") |  Display text without executing any code. Uses the Atari's executable load file to load a minimal display list showing the text, and directly updates the OS's ANTIC shadow registers to install the display list. |
+| [ATARI_ATASM_SCREENRAM.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_SCREENRAM.asm "ATARI_ATASM_SCREENRAM.asm") | Display text without executing any code. Uses the Atari's executable load file to load the text directly into the screen RAM for the OS's default text display. |
+| Horizontal Scrolling |
+|[font_left_scroll1.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.asm "font_left_scroll1.asm") | Scroll text by shifting character bitmaps through a sequential line of characters in a soft character set. |
+| [font_left_scroll2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll2.asm "font_left_scroll2.asm") | Same program as font_left_scroll1 with loops unrolled to dramatically improve execution time. |
+| [left_scroll3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll3.asm "left_scroll3.asm") | Scroll text by shifting character bitmaps through lines of bitmapped graphics. Faster than font_left_scroll1.asm above, and smaller code than font_left_scroll2. |
+| [left_scroll4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll4.asm "left_scroll4.asm") | For sake of comparison this is how it looks done in real hardware scrolling.  Magically fast and small code. |
 
 ---
 
