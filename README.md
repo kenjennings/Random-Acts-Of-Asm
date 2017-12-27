@@ -57,35 +57,56 @@ All the ANTIC mode instructions in the Display List include LMS pointing to the 
 
 The World's Smallest Raster Bar Demo.
 
-All it does is copy ANTIC's scan line counter to the background color:
+Two lines do all the color work.  All it does is copy ANTIC's scan line counter to the background color:
 
 ```asm
 	lda VCOUNT    ; Load VCOUNT scan line counter
 	sta COLBK     ; COLOR!
 ```
 
-That's all it is.
+---
 
-Sets up a simple GTIA mode 9 display (16 grey scales) and uses Display List Interupts to change the base color at 16 places on screen to show all 256 GTIA colors on a single display.
+**rbd2.asm**
 
-It's not a real GTIA mode 9 display.  There is only one line of screen memory defined that shows pixels from color 0 to 15 across the width of the screen:
+[![rbd2.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.png)](#rbd2.png)
+
+The World's Smallest Raster Bar Demo. (with thinner color bars.)
+
+Same as the prior demo with the addition of ASL to multiply value times 2.  This makes the color bars vertically smaller, since the color value use even values, not odd values:
 
 ```asm
-; Each Block on screen is 5 GTIA pixels wide.
-; Blocks range from value 0 to 15.
-
-SCREEN_MEM
-	.byte $00,$00,$01,$11,$11
-	.byte $22,$22,$23,$33,$33
-	.byte $44,$44,$45,$55,$55
-	.byte $66,$66,$67,$77,$77
-	.byte $88,$88,$89,$99,$99
-	.byte $aa,$aa,$ab,$bb,$bb
-	.byte $cc,$cc,$cd,$dd,$dd
-	.byte $ee,$ee,$ef,$ff,$ff
+	lda VCOUNT    ; Load VCOUNT scan line counter
+	asl a         ; Divide by 2 to shrink bar height
+	sta COLBK     ; COLOR!
 ```
 
-All the ANTIC mode instructions in the Display List include LMS pointing to the same screen memory, so the entire display is populated with the same line of graphics. 
+---
+
+**rbd3.asm**
+
+[![rbd3.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd3.png)](#rbd3.png)
+
+The World's Smallest Raster Bar Demo. (with smaller color bars and vertical movement)
+
+Same as the prior demo with the addition of seeding the starting color from the system's jiffy clock (1/60 second). This causes the bars to "move" with each frame. 
+
+```asm
+	lda VCOUNT    ; Load VCOUNT scan line counter
+	asl a         ; Divide by 2 to shrink bar height
+	clc
+	adc RTCLOK60  ; Add the jiffy timer.
+	sta COLBK     ; COLOR!
+```
+
+---
+
+**rbd4.asm**
+
+[![rbd4.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd4.png)](#rbd4.png)
+
+The World's Smallest Raster Bar Demo. (that is starting to get much longer.)  
+
+This does more activities to present and move the bars.  It monitors the scan line counter to begin the bars at a specific location on screen.  It shifts color bars in one direction, then further down on the screen shifts the colors again in the other direction. 
 
 ---
 
