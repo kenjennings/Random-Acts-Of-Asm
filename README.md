@@ -80,7 +80,7 @@ The program includes a few extra bells and whistles to provide visual feedback o
 
 **left_scroll3.asm**
 
-YouTube video: https://youtu.be/GZYwHxWiN0U
+YouTube video: https://youtu.be/L2wj6jGeq8M
 
 [![left_scroll3](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/left_scroll3.png)](#left_scroll3)
 
