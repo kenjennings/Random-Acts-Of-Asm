@@ -209,10 +209,10 @@ done
 	; The target location is fixed/known, so this should not need a 
 	; reference through page 0 for the target location.
 	;
-	; Also, the source should not be the soft charset since 40 of the characters
-	; are being used for scrolling.  Using the ROM charset for source or any 
-	; other soft charset not participating in the scrolling then makes that 
-	; entire "font" available for the scroll.
+	; Also, the source should not be the soft charset used for scrolling since 
+	; 40 of the characters are being occupied by scrolling.  
+	; Using the ROM charset for source or any other soft charset not participating 
+	; in the scrolling then makes that entire "font" available for the scroll.
 	;
 	; The other caveat is that "inverse" video is done by ANTIC and is not in 
 	; the font bitmap.  Therefore, to scroll an inverse character a different 
@@ -226,16 +226,16 @@ grab_next_char
 	sta Z_ROM_SOURCE
 	lda #$00
 	sta Z_ROM_SOURCE+1
-	; cheat multiply by 8 to get the character's bitmap start address
+	
+	;  multiply by 8 to get the character's bitmap start address
 	clc
-	rol Z_ROM_SOURCE   ; * 2
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
+	rol Z_ROM_SOURCE   ; * 2 ; as $7F is the max input then carry will be 0 the first time.
 	rol Z_ROM_SOURCE   ; * 4
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
+	rol Z_ROM_SOURCE+1 ; * 4 carry will be 0 from the high byte
 	rol Z_ROM_SOURCE   ; * 8
-	rol Z_ROM_SOURCE+1 ; carry should be 0 from the high byte
+	rol Z_ROM_SOURCE+1 ; * 8 carry will be 0 from the high byte
+	
 	; Add to the ROM address
-	clc
 	lda Z_ROM_SOURCE+1
 	adc #$E0  ; $E0 is ROM. Or this could be the high byte for a custom charset address.
 	sta Z_ROM_SOURCE+1
