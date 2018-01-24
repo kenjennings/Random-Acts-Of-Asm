@@ -47,36 +47,36 @@
 PRG_START
 
 WaitForTop
-	lda VCOUNT
-	cmp #32
-	bne WaitForTop
+	lda VCOUNT     ; Get scan line counter
+	cmp #32        ; Is it 32?
+	bne WaitForTop ; Go back and wait if this is not scanline 32
 	
-	ldy RTCLOK60
-	ldx #64
+	ldy RTCLOK60   ; Start with jiffy (1/60th sec) clock
+	ldx #64        ; Do this first part 64 times.
 	
 TopColorLoop
-	sty WSYNC
-	sty COLBK
-	iny
-	iny
-	dex
-	bpl TopColorLoop
+	sty WSYNC        ; sync to end of current scan line.
+	sty COLBK        ; Save Y in color register.
+	iny              ; Y = Y + 1
+	iny              ; Y = Y + 1 (so, next color is now +2)
+	dex              ; X = X - 1 (number of lines)  
+	bpl TopColorLoop ; If 64 lines are not counted then do it again.
 	
-	ldx #64
+	ldx #64             ; Do this next part 64 times.
 	
 BottomColorLoop
-	sty WSYNC
-	sty COLBK
-	dey
-	dey
-	dex
-	bpl BottomColorLoop
+	sty WSYNC           ; sync to end of current scan line.
+	sty COLBK           ; Save Y in color register.
+	dey                 ; Y = Y - 1
+	dey                 ; Y = Y - 1 (so, next color is now -2)
+	dex                 ; X = X - 1 (number of lines)
+	bpl BottomColorLoop ; If 64 lines are not counted then do it again.
 	
-	lda #0
-	sta WSYNC
-	sta COLBK
+	lda #0         ;  Clean and tidy.  Use black/color 0.
+	sta WSYNC      ;  sync to end of current scan line.
+	sta COLBK      ; Save black/0 in color register.
 
-	jmp PRG_START
+	jmp PRG_START  ; Do While More Electricity
 	
 ; --------------------------------------------------------------------
 ; Store the program start location in the Atari DOS RUN Address.
