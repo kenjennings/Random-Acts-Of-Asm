@@ -86,7 +86,7 @@ Same as the prior demo with the addition of ASL to multiply value times 2.  This
 
 [![rbd3.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd3.png)](#rbd3.png)
 
-The World's Smallest Raster Bar Demo. (with smaller color bars and vertical movement)
+The World's Smallest Raster Bar Demo. (with thinner color bars and vertical movement)
 
 Same as the prior demo with the addition of seeding the starting color from the system's jiffy clock (1/60 second). This causes the bars to "move" with each frame. 
 
