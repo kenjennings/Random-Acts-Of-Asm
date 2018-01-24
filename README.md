@@ -64,6 +64,8 @@ Two lines do all the color work.  All it does is copy ANTIC's scan line counter 
 	sta COLBK     ; COLOR!
 ```
 
+The color changes occur every four scan lines, because VCOUNT increments every other scan line and the luminance value of color registers in GTIA's normal color interpretation mode does not use the low bit.
+
 ---
 
 **rbd2.asm**
@@ -72,11 +74,11 @@ Two lines do all the color work.  All it does is copy ANTIC's scan line counter 
 
 The World's Smallest Raster Bar Demo. (with thinner color bars.)
 
-Same as the prior demo with the addition of ASL to multiply value times 2.  This makes the color bars vertically smaller, since the color value use even values, not odd values:
+Same as the prior demo with the addition of ASL to multiply value times 2.  This makes the color bars vertically smaller, since the color register does not use the low bit.  The color changes occur every two scan lines, because VCOUNT increments every other scan line.
 
 ```asm
 	lda VCOUNT    ; Load VCOUNT scan line counter
-	asl a         ; Divide by 2 to shrink bar height
+	asl a         ; Multiply by 2 to shrink bar height
 	sta COLBK     ; COLOR!
 ```
 
@@ -88,11 +90,11 @@ Same as the prior demo with the addition of ASL to multiply value times 2.  This
 
 The World's Smallest Raster Bar Demo. (with thinner color bars and vertical movement)
 
-Same as the prior demo with the addition of seeding the starting color from the system's jiffy clock (1/60 second). This causes the bars to "move" with each frame. 
+Same as the prior demo and now adds the system's jiffy clock (1/60 second) to the color value. This causes the bars to "move" with each frame. 
 
 ```asm
 	lda VCOUNT    ; Load VCOUNT scan line counter
-	asl a         ; Divide by 2 to shrink bar height
+	asl a         ; Multiply by 2 to shrink bar height
 	clc
 	adc RTCLOK60  ; Add the jiffy timer.
 	sta COLBK     ; COLOR!
