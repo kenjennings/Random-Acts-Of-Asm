@@ -5,7 +5,7 @@
 ; The World's Smallest Raster Bar Demo (with smaller color bars and vertical movement)
 ;
 ; Load value of scan line counter.
-; Divide by 2. (which shrinks the size of the color bars.)
+; Multiply by 2. (which shrinks the size of the color bars.)
 ; Add that value to the current jiffy (1/60 sec) timer value.
 ; Write that value to the background color.
 ; do it again until there is no more electricity.
@@ -42,7 +42,7 @@
 
 PRG_START
 	lda VCOUNT    ; Load VCOUNT scan line counter
-	asl a         ; Divide by 2 to shrink bar height
+	asl a         ; Multiply by 2 to shrink bar height
 	clc
 	adc RTCLOK60  ; Add the jiffy timer.
 	sta COLBK     ; COLOR!
