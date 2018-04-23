@@ -5,7 +5,7 @@ Random bits and bytes of Atari 6502 assembly.
 | ------- | ------- |
 | **Color, Color, Color** |
 | [GTIA256.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/GTIA256.asm "GTIA256.asm") | Display all 256 colors on one screen. |
-| [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo. |
+| [twsrbd.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.asm "twsrbd.asm") | The World's Smallest Raster Bar Demo. (Two instructions.  and a JMP.)|
 | [rbd2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd2.asm") | The World's Smallest Raster Bar Demo. (with thinner color bars) |
 | [rbd3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd3.asm "rbd3.asm") | The World's Smallest Raster Bar Demo. (with thinner color bars and vertical movement) |
 | [rbd4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd4.asm "rbd4.asm") | The World's Smallest Raster Bar Demo. (with vertical positioning, even thinner color bars, and two different vertical movements.) |
