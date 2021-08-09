@@ -17,8 +17,8 @@ Random bits and bytes of Atari 6502 assembly.
 | [ATARI_ATASM_DISPLAYLIST_EXTRA.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_DISPLAYLIST_EXTRA.asm "ATARI_ATASM_DISPLAYLIST_EXTRA.asm") |  Display text without executing any code. Uses the Atari's executable load file to load a minimal display list showing the text, and directly updates the OS's ANTIC shadow registers to install the display list. |
 | [ATARI_ATASM_SCREENRAM.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_SCREENRAM.asm "ATARI_ATASM_SCREENRAM.asm") | Display text without executing any code. Uses the Atari's executable load file to load the text directly into the screen RAM for the OS's default text display. |
 | **More Text - "10 PRINT"**|
-|[MazeDiag.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/MazeDiag.asm "MazeDiag.asm") | Assembly version of the "10 PRINT" BASIC program that draws an infinite, random maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. |
-|[MazeOrtho.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/MazeOrtho.asm "MazeOrtho.asm") | Assembly version of the "10 PRINT" BASIC program that draws an infinite, random maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. |
+|[MazeDiag.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/MazeDiag.asm "MazeDiag.asm") | Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. |
+|[MazeOrtho.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/MazeOrtho.asm "MazeOrtho.asm") | Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. |
 | **Horizontal Scrolling** |
 |[font_left_scroll1.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll1.asm "font_left_scroll1.asm") | Scroll text by shifting character bitmaps through a sequential line of characters in a soft character set. |
 | [font_left_scroll2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/font_left_scroll2.asm "font_left_scroll2.asm") | Same program as font_left_scroll1 with loops unrolled to dramatically improve execution time. |
@@ -58,7 +58,7 @@ All the ANTIC mode instructions in the Display List include LMS pointing to the 
 
 [![MazeDiag](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/TenPrintMazeDiag.png)](#TenPrintMazeDiag)
 
-Assembly version of the "10 PRINT" BASIC program that draws an infinite, random maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
+Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
 
 The program is very short, executing from Page 0.
 
@@ -68,7 +68,7 @@ The program is very short, executing from Page 0.
 
 [![MazeOrtho](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/TenPrintMazeOrtho.png)](#TenPrintMazeOrtho)
 
-Assembly version of the "10 PRINT" BASIC program that draws an infinite, random maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
+Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
 
 The program is very short, executing from Page 0.
 
