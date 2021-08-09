@@ -76,7 +76,7 @@ The program is very short, executing from Page 0.
 
 **twsrbd.asm**
 
-[![twsrbd.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/TenPrint.png)](#twsrbd.png)
+[![twsrbd.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/twsrbd.png)](#twsrbd.png)
 
 The World's Smallest Raster Bar Demo.
 
