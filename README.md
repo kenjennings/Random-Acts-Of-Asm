@@ -60,7 +60,9 @@ All the ANTIC mode instructions in the Display List include LMS pointing to the 
 
 Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
 
-The program is very short, executing from Page 0.
+This version is 43 bytes including the executable file structure overhead.   The code itself is 31 bytes executing from page 0.   About 10 of that supplies the mostly OS-friendly routine to print characters to E:, so more diabolical coders could make that shorter.
+
+On further consideration, both versions of the demos use 5 bytes of code to set the left margin to 0.   The same effect could be achieved executing no code at all.   Using the executable file format, a segment could be defined to load the 0 byte value into LMARGN directly at load time.   Then the executing code size would be reduced to 26 bytes.
 
 ---
 
@@ -70,7 +72,7 @@ The program is very short, executing from Page 0.
 
 Assembly version of the "10 PRINT" BASIC program that draws an infinite, random, maze-like pattern.  The program uses the Central I/O put character routine for E: that is intended for BASIC. 
 
-The program is very short, executing from Page 0.
+The program is very short, executing from Page 0.  The executable file is 51 bytes.  Of that, 39 bytes is actual executing code.
 
 ---
 
