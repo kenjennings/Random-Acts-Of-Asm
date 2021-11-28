@@ -62,7 +62,7 @@ Assembly version of the "10 PRINT" BASIC program that draws an infinite, random,
 
 This version is 43 bytes including the executable file structure overhead.   The code itself is 31 bytes executing from page 0.   About 10 of that supplies the mostly OS-friendly routine to print characters to E:, so more diabolical coders could make that shorter.
 
-On further consideration, both versions of the demos use 5 bytes of code to set the left margin to 0.   The same effect could be achieved executing no code at all.   Using the executable file format, a segment could be defined to load the 0 byte value into LMARGN directly at load time.   Then the executing code size would be reduced to 26 bytes.
+On further consideration, both versions of the demos use 4 bytes of code to set the left margin to 0.   The same effect could be achieved executing no code at all.   Using the executable file format, a segment could be defined to load the 0 byte value into LMARGN directly at load time.   Then the executing code size would be reduced to 27 bytes.
 
 ---
 
