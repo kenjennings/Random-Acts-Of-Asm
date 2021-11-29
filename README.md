@@ -54,7 +54,7 @@ All the ANTIC mode instructions in the Display List include LMS pointing to the 
 
 ---
 
-**MazeDiag.asm**
+**10PRINT MazeDiag.asm**
 
 [![MazeDiag](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/TenPrintMazeDiag.png)](#TenPrintMazeDiag)
 
@@ -66,7 +66,7 @@ On further consideration, both versions of the demos use 4 bytes of code to set 
 
 ---
 
-**MazeOrtho.asm**
+**10PRINT MazeOrtho.asm**
 
 [![MazeOrtho](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/TenPrintMazeOrtho.png)](#TenPrintMazeOrtho)
 
