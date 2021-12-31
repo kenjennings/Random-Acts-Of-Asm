@@ -63,28 +63,26 @@ LoopColors
 
 	sta COLBK ; Color  2
 
-	lda #$86  
+	lda #$0c 
 	sta COLBK ; Color  3
-	lda #$D6
-	sta COLBK ; Color  4
-	lda #$16
-	sta COLBK ; Color  5
-	lda #$66
-	sta COLBK ; Color  6
-	lda #$B6
-	sta COLBK ; Color  7
-	lda #$06
-	sta COLBK ; Color  8
 	lda #$56
+	sta COLBK ; Color  4
+	lda #$0a
+	sta COLBK ; Color  5
+	lda #$76
+	sta COLBK ; Color  6
+	lda #$08
+	sta COLBK ; Color  7
+	lda #$96
+	sta COLBK ; Color  8
+	lda #$06
 	sta COLBK ; Color  9
-	lda #$a6
+	lda #$b6
 	sta COLBK ; Color  10
-	lda #$F6
+	lda #$04
 	sta COLBK ; Color  11
-	lda #$46
+	lda #$d6
 	sta COLBK ; Color  12
-;	lda #$76
-;	sta COLBK ; Color  12
 
 	dex
 	bne LoopColors
