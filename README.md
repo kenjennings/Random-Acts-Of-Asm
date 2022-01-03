@@ -9,6 +9,7 @@ Random bits and bytes of Atari 6502 assembly.
 | [rbd2.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd2.asm "rbd2.asm") | The World's Smallest Raster Bar Demo. (with thinner color bars) |
 | [rbd3.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd3.asm "rbd3.asm") | The World's Smallest Raster Bar Demo. (with thinner color bars and vertical movement) |
 | [rbd4.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/rbd4.asm "rbd4.asm") | The World's Smallest Raster Bar Demo. (with vertical positioning, even thinner color bars, and two different vertical movements.) |
+| [Atari800as2600.asm](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/Atari800as2600.asm "Atari800as2600.asm") | Racing the beam to make multiple color changes on the background like it were 1976. |
 | **"Writing" Text** |
 |[ATARI_ATASM_CIO_PUTBYTES.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTBYTES.asm "ATARI_ATASM_CIO_PUTBYTES.asm") | Use the official, legally sanctioned call through the OS Central I/O to write the string to the screen editor (E: device.) |
 | [ATARI_ATASM_CIO_PUTCHEAT.asm](https://github.com/kenjennings/HelloWhirled/blob/master/ATARI_ATASM_CIO_PUTCHEAT.asm "ATARI_ATASM_CIO_PUTCHEAT.asm") | Uses the OS Central I/O in a slightly less than sanctioned way to write the characters to the screen editor (E: device.)  It reduces the effort to set up IOCB by using the PUT CHAR vector shortcut in the IOCB channel which is intended for Atari BASIC.|
@@ -134,6 +135,24 @@ Same as the prior demo and now adds the system's jiffy clock (1/60 second) to th
 The World's Smallest Raster Bar Demo. (that is starting to get much longer.)  
 
 This does more activities to present and move the bars.  It monitors the scan line counter to begin the bars at a specific location on screen.  It shifts color bars in one direction, then further down on the screen shifts the colors again in the other direction. 
+
+---
+
+**Atari800as2600.asm**
+
+[![Atari800as2600.png](https://github.com/kenjennings/Random-Acts-Of-Asm/blob/master/Atari800as2600.png)](#Atari800as2600.png)
+
+A demo beating up the the background color register as if this were 1976 and we are racing the beam.  
+
+A quick test to see how many horizontal color changes can be performed on a scan line.  (About 12)   Granted, this is under artificial circumstances -- ANTIC DMA is turned off.
+
+Note that the color bars are slightly wider on the left side of the screen.  This is due to cycles borrowed by the system for memory refresh.
+
+The last color change on the right side occurs where it does (and no other change follows), because if the write to WSYNC occurs any later then ANTIC will miss the sync to the end of scan line and will actually sync to the end of the NEXT scan line.
+
+If the internal loop was unrolled to eliminate the loop controls and the WSYNC for line to line timing was replaced with NOPs instead then it may be possible to squeeze in two more visible changes per scan line.  (Maybe)
+
+Under real world circumstances this would be done with some kind of graphics or text mode being displayed, so the DMA time used for the display will limit the possible number of color changes to less than what is seen in this demo.   (Seriously, on the 1st line of ANTIC text modes 2, 3, 4, 5 it may bot be possible to change color more than once due to the DMA needed for the display list, text line data, and the character set.)
 
 ---
 
